@@ -41,7 +41,7 @@ Sekcja z repozytoriami pobiera gwiazdki, język i datę ostatniego pusha z GitHu
 Strona działa na Cloudflare Workers przez adapter [OpenNext](https://opennext.js.org/cloudflare).
 Konfiguracja: `wrangler.jsonc` (Worker `kacperblok-pl`) i `open-next.config.ts`.
 
-- R2 (`kacperblok-pl-cache`) trzyma prerenderowane strony i cache zapytań do GitHub API,
+- Workers KV (`kacperblok-pl-cache`) trzyma prerenderowane strony i cache zapytań do GitHub API,
 - Durable Object `DOQueueHandler` odświeża strony w tle po upływie `revalidate` (1 h),
 - binding `IMAGES` optymalizuje obrazy z `next/image` (Cloudflare Images).
 
@@ -49,7 +49,7 @@ Skrypty:
 
 ```bash
 npm run preview   # build pod Workera + lokalny podgląd na http://localhost:8787
-npm run deploy    # build + wgranie cache do R2 + deploy
+npm run deploy    # build + wgranie cache do KV + deploy
 npm run cf-typegen  # typy bindingów do cloudflare-env.d.ts
 ```
 
@@ -59,12 +59,12 @@ Lokalne sekrety dla `npm run preview`: skopiuj `.dev.vars.example` do `.dev.vars
 
 ```bash
 npx wrangler login
-npx wrangler r2 bucket create kacperblok-pl-cache
+npx wrangler kv namespace create kacperblok-pl-cache   # zwrócone id wpisz w wrangler.jsonc
 npx wrangler secret put GITHUB_TOKEN   # opcjonalnie
 npm run deploy
 ```
 
-R2 wymaga jednorazowego włączenia w panelu Cloudflare (darmowy limit wystarcza dla portfolio).
+KV działa na darmowym planie bez podpinania karty (limit 1000 zapisów dziennie wystarcza dla portfolio).
 Zmienne `NEXT_PUBLIC_*` są wstawiane w czasie builda, więc ustawia się je w `.env.local`
 lub w zmiennych builda (Workers Builds), a nie w `vars` Workera.
 
