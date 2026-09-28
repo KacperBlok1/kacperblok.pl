@@ -1,0 +1,3 @@
+# local secrets for `npm run preview` (wrangler), copy to .dev.vars
+# optional, raises the GitHub API limit from 60 to 5000 requests per hour
+GITHUB_TOKEN=

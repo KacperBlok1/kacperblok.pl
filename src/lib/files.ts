@@ -1,8 +1,8 @@
 import "server-only";
 
-import { existsSync } from "node:fs";
-import path from "node:path";
+// filled in next.config.ts at build time, the Workers runtime cannot read public/
+const publicFiles = new Set<string>(JSON.parse(process.env.PUBLIC_FILES ?? "[]"));
 
 export function publicFileExists(publicPath: string): boolean {
-  return existsSync(path.join(process.cwd(), "public", publicPath));
+  return publicFiles.has(publicPath.startsWith("/") ? publicPath : `/${publicPath}`);
 }
