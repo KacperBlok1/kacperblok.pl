@@ -32,14 +32,6 @@ export const selectedRepositories: LocalRepo[] = [
     language: "Python",
   },
   {
-    name: "student-progress",
-    description: {
-      pl: "Aplikacja desktopowa dla prowadzących: oceny, obecność i przegląd kodu studentów przez lokalny model AI.",
-      en: "Electron app for teachers: grading, attendance and AI code review of student repos with a local LLM.",
-    },
-    language: "TypeScript",
-  },
-  {
     name: "blockout-strona",
     description: {
       pl: "Strona firmy od druku i oznakowania: React 19, SEO generowane przy buildzie, formularz z ochroną przed spamem.",

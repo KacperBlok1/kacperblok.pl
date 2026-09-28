@@ -14,11 +14,11 @@ function Actions({ project, locale, sage = false }: { project: Project; locale: 
   const t = getDictionary(locale);
   return (
     <div className="flex flex-wrap gap-2.5 pt-2">
-      <ButtonLink href={project.repoUrl} variant={sage ? "sage" : "primary"}>
+      {project.codeAvailable !== false ? <ButtonLink href={project.repoUrl} variant={sage ? "sage" : "primary"}>
         <GitHubIcon size={17} />
         GitHub
         <span className="sr-only">{t.repositoryFor} {project.title}</span>
-      </ButtonLink>
+      </ButtonLink> : <span className="self-center text-sm font-semibold text-neutral-700">{t.codeUnavailable}</span>}
       <ButtonLink href={localePath(locale, `/projects/${project.slug}`)} variant="secondary">
         {t.caseStudy}
         <ArrowRight aria-hidden size={15} strokeWidth={2.75} />
@@ -39,6 +39,17 @@ export function Visual({ project, img, className, sizes }: { project: Project; i
   const { screenshot, ...media } = img;
   if (img.src || !preview) return <Media {...media} washed={!screenshot} className={className} sizes={sizes} />;
   if (preview.kind === "terminal") return <CodeWindow title={preview.title} lines={preview.lines} className={className} />;
+  if (preview.kind === "flow") return (
+    <div className={`flex flex-col justify-center gap-4 bg-sand p-5 ${className}`}>
+      <p className="text-xs font-bold uppercase tracking-wide text-accent-800">{preview.title}</p>
+      <ol className="flex flex-col gap-2">
+        {preview.lines.map((line, index) => <li key={line} className="flex items-center gap-3 text-sm font-semibold leading-snug">
+          <span aria-hidden className="grid size-7 shrink-0 place-items-center rounded-full border border-ink bg-sage-200 text-xs">{index + 1}</span>
+          {line.replace(/^\d\s/, "")}
+        </li>)}
+      </ol>
+    </div>
+  );
   return (
     <div className={`grid place-items-center bg-neutral-100 text-center ${className}`}>
       <p>

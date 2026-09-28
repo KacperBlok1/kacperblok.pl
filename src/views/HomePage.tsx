@@ -6,6 +6,7 @@ import { SelectedWork } from "@/components/sections/SelectedWork";
 import { GitHubSection } from "@/components/sections/GitHubSection";
 import { OutsideTerminal } from "@/components/sections/OutsideTerminal";
 import { Contact } from "@/components/sections/Contact";
+import { FAQ } from "@/components/sections/FAQ";
 
 export function HomePage({ locale }: { locale: Locale }) {
   return (
@@ -16,6 +17,7 @@ export function HomePage({ locale }: { locale: Locale }) {
       <SelectedWork locale={locale} />
       <GitHubSection locale={locale} />
       <OutsideTerminal locale={locale} />
+      <FAQ locale={locale} />
       <Contact locale={locale} />
     </main>
   );

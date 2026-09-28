@@ -27,7 +27,7 @@ export const projectsPl: Record<string, ProjectTranslation> = {
       challenges: [
         {
           title: "Gdy Open-Meteo nie działa",
-          body: "Prognozy są trzymane w PostgreSQL: świeże przez 15 minut, awaryjne przez 24 godziny. Jeśli Open-Meteo nie odpowiada, serwer oddaje ostatnią poprawną odpowiedź, a aplikacja pokazuje, ile ma lat. Brak danych o fali jest pokazywany wprost, a nie zgadywany.",
+          body: "Prognozy są trzymane w PostgreSQL: świeże przez 15 minut, awaryjne przez 24 godziny. Jeśli Open-Meteo nie odpowiada, serwer oddaje ostatnią poprawną odpowiedź, a aplikacja pokazuje, sprzed ilu godzin pochodzą dane. Brak danych o fali jest pokazywany wprost, a nie zgadywany.",
         },
         {
           title: "Strefy czasowe",
@@ -155,7 +155,7 @@ export const projectsPl: Record<string, ProjectTranslation> = {
       ],
       run: ["npm install", "npm run dev", "# produkcja: docker compose up -d --build  (port 8080)"],
     },
-    images: [{ alt: "Strona główna Blockout" }],
+    images: [{ alt: "Strona Blockout: oferta druku i oznakowania oraz przycisk zapytania o wycenę" }],
   },
 
   "face-emotion-recognition": {
@@ -244,6 +244,7 @@ export const projectsPl: Record<string, ProjectTranslation> = {
       run: ["npm run install:all", "# potrzebna działająca lokalnie Ollama", "npm run dev", "# na Windowsie jednym kliknięciem: start_app.bat"],
     },
     images: [{ alt: "Schemat przeglądu kodu przez AI" }],
+    preview: { kind: "flow", title: "Przegląd kodu · schemat działania", lines: ["Repozytoria studenta z GitHub API", "Pobranie kodu źródłowego", "Analiza lokalnym modelem Ollama", "Odczyt uwag z odpowiedzi JSON", "Zapis w historii studenta"] },
   },
 
   "ai-upscaler": {
@@ -291,5 +292,6 @@ export const projectsPl: Record<string, ProjectTranslation> = {
       ],
     },
     images: [{ alt: "Etapy obróbki w AI Upscalerze" }],
+    preview: { kind: "flow", title: "Obróbka zdjęcia · schemat działania", lines: ["Wczytanie zdjęcia", "Zmiana rozmiaru w OpenCV", "Opcjonalne usunięcie tła", "Real-ESRGAN ×4 na GPU lub CPU", "Wyostrzenie obrazu", "Zapis gotowego pliku"] },
   },
 };

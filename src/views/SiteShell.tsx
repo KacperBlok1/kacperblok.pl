@@ -1,10 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import { Figtree, Fraunces } from "next/font/google";
 import { siteConfig, siteCopy } from "@/config/site";
-import { htmlLang, localePath, type Locale } from "@/i18n/locales";
+import { htmlLang, type Locale } from "@/i18n/locales";
 import { getDictionary } from "@/i18n/ui";
 import { Nav } from "@/components/layout/Nav";
 import { Footer } from "@/components/layout/Footer";
+import { Analytics } from "@/components/Analytics";
+import { pageMetadata } from "@/lib/seo";
 import "@/app/globals.css";
 
 const fraunces = Fraunces({
@@ -20,22 +22,13 @@ export const siteViewport: Viewport = { themeColor: "#f5ead8" };
 export function siteMetadata(locale: Locale): Metadata {
   const title = `${siteConfig.fullName} – ${siteConfig.role}`;
   const description = siteCopy[locale].description;
-  return {
-    metadataBase: new URL(siteConfig.url),
-    title,
-    description,
-    alternates: {
-      canonical: localePath(locale, "/"),
-      languages: { pl: localePath("pl", "/"), en: localePath("en", "/") },
-    },
-    openGraph: { title, description, type: "website", locale: locale === "pl" ? "pl_PL" : "en_US" },
-  };
+  return pageMetadata(locale, "/", title, description);
 }
 
 export function SiteShell({ locale, children }: { locale: Locale; children: React.ReactNode }) {
   const t = getDictionary(locale);
   return (
-    <html lang={htmlLang[locale]} className={`${fraunces.variable} ${figtree.variable}`}>
+    <html lang={htmlLang[locale]} data-scroll-behavior="smooth" className={`${fraunces.variable} ${figtree.variable}`}>
       <body>
         <noscript>
           <style>{"[data-reveal]{opacity:1!important;transform:none!important}"}</style>
@@ -49,6 +42,7 @@ export function SiteShell({ locale, children }: { locale: Locale; children: Reac
         <Nav locale={locale} />
         {children}
         <Footer locale={locale} />
+        <Analytics locale={locale} />
       </body>
     </html>
   );
