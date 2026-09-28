@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f5ead8"/>
+  <rect x="28" y="28" width="1144" height="574" rx="28" fill="none" stroke="#201e1d" stroke-width="3"/>
+  <circle cx="1058" cy="147" r="62" fill="#ccdbb2" stroke="#201e1d" stroke-width="3"/>
+  <text x="1058" y="163" text-anchor="middle" fill="#201e1d" font-family="Georgia,serif" font-size="46" font-weight="bold">KB</text>
+  <text x="80" y="114" font-family="Arial,sans-serif" font-weight="bold" font-size="20" letter-spacing="3" fill="#8c491a">PORTFOLIO / BACKEND</text>
+  <text x="76" y="265" font-family="Georgia,serif" font-weight="bold" font-size="105" letter-spacing="-4" fill="#201e1d">Kacper Blok.</text>
+  <text x="80" y="334" font-family="Arial,sans-serif" font-size="38" fill="#8c491a">Junior Backend Developer</text>
+  <path d="M80 385h1040" stroke="#201e1d" stroke-width="2"/>
+  <rect x="80" y="421" width="578" height="60" rx="30" fill="#e1eecc" stroke="#201e1d" stroke-width="2"/>
+  <text x="108" y="460" font-family="Arial,sans-serif" font-weight="bold" font-size="24" fill="#201e1d">Python · TypeScript · PostgreSQL · Docker</text>
+  <text x="80" y="555" font-family="Arial,sans-serif" font-size="23" fill="#474238">Gdańsk, PL</text>
+  <text x="1120" y="555" text-anchor="end" font-family="Arial,sans-serif" font-weight="bold" font-size="26" fill="#201e1d">kacperblok.pl ↗</text>
+</svg>

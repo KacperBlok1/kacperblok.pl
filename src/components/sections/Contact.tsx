@@ -20,7 +20,7 @@ export function Contact({ locale }: { locale: Locale }) {
           <span aria-hidden className="absolute -top-[22px] right-[clamp(20px,6vw,70px)] rotate-[5deg] rounded-full border-2 border-ink bg-sage-300 px-4 py-2 text-sm font-bold">
             {contact.sticker}
           </span>
-          <p className="mb-2.5 text-[13px] font-bold uppercase tracking-[0.12em] text-accent-900">06 · {t.contactKicker}</p>
+          <p className="mb-2.5 text-[13px] font-bold uppercase tracking-[0.12em] text-accent-900">07 · {t.contactKicker}</p>
           <h2 id="contact-title" className="mb-5 max-w-[13ch] text-[clamp(34px,6.4vw,84px)] leading-[1.02]">
             {contact.heading}
           </h2>

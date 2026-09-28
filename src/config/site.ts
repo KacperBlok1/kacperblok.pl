@@ -6,7 +6,7 @@ export const siteConfig = {
   name: "Kacper",
   fullName: "Kacper Blok",
   role: "Junior Backend Developer",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://kacperblok.pl",
   availableForInternships: true,
 
   email: "kacper.blok@gmail.com",
@@ -61,7 +61,7 @@ const codeLines = (city: string, openTo: string) => [
 export const siteCopy: Record<Locale, SiteCopy> = {
   pl: {
     description:
-      "Kacper Blok – junior backend developer i student informatyki z Gdańska. Aplikacje na Node.js i PostgreSQL, narzędzia w Pythonie do rozpoznawania obrazu, wszystko wdrażane w Dockerze.",
+      "Kacper Blok — junior backend developer z Gdańska. Poznaj projekty w Node.js, Pythonie i PostgreSQL, pobierz CV i skontaktuj się w sprawie pracy lub stażu.",
     location: "Gdańsk",
     availabilityLabel: "Szukam pracy jako junior lub stażu",
     nav: nav("pl", ["O mnie", "Projekty", "GitHub", "Kontakt"]),
@@ -86,7 +86,7 @@ export const siteCopy: Record<Locale, SiteCopy> = {
   },
   en: {
     description:
-      "Kacper Blok – junior backend developer and Computer Science student in Gdańsk. Self-hosted apps on Node.js and PostgreSQL, Python tools for computer vision, shipped with Docker.",
+      "Kacper Blok, junior backend developer in Gdańsk. Explore Node.js, Python and PostgreSQL projects, download my CV and get in touch about roles or internships.",
     location: "Gdańsk, Poland",
     availabilityLabel: "Open to junior roles & internships",
     nav: nav("en", ["About", "Work", "GitHub", "Contact"]),

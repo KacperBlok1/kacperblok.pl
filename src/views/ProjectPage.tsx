@@ -13,6 +13,7 @@ import { CodeWindow } from "@/components/ui/CodeWindow";
 import { GitHubIcon } from "@/components/ui/Icons";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { TagList } from "@/components/ui/TagList";
+import { pageMetadata, projectDescriptions } from "@/lib/seo";
 
 export function projectStaticParams() {
   return projects.map((project) => ({ slug: project.slug }));
@@ -23,15 +24,7 @@ export function projectMetadata(locale: Locale, slug: string): Metadata {
   if (!project) return {};
   const title = `${project.title} – ${siteConfig.fullName}`;
   const path = `/projects/${slug}`;
-  return {
-    title,
-    description: project.details.overview,
-    alternates: {
-      canonical: localePath(locale, path),
-      languages: { pl: localePath("pl", path), en: localePath("en", path) },
-    },
-    openGraph: { title, description: project.details.overview, type: "article", locale: locale === "pl" ? "pl_PL" : "en_US" },
-  };
+  return pageMetadata(locale, path, title, projectDescriptions[slug]?.[locale] ?? project.description);
 }
 
 const wrap = "mx-auto max-w-[1200px] px-[clamp(18px,4vw,40px)]";
@@ -81,21 +74,21 @@ export function ProjectPage({ locale, slug }: { locale: Locale; slug: string }) 
                 {details.overview}
               </p>
               <div className="flex w-full flex-col gap-3 pt-1 sm:w-auto sm:flex-row sm:flex-wrap">
-                <ButtonLink href={project.repoUrl} size="lg" className="shadow-stamp">
+                {project.codeAvailable !== false ? <ButtonLink href={project.repoUrl} size="lg" className="shadow-stamp">
                   <GitHubIcon />
                   {t.viewCode}
-                </ButtonLink>
+                </ButtonLink> : <span className="self-center text-sm font-semibold">{t.codeUnavailable}</span>}
                 {project.demoUrl ? (
                   <ButtonLink href={project.demoUrl} size="lg" variant="secondary">
                     {t.liveDemo}
                     <ArrowUpRight aria-hidden size={18} strokeWidth={2.75} />
                   </ButtonLink>
-                ) : (
+                ) : project.codeAvailable !== false ? (
                   <ButtonLink href="#run" size="lg" variant="secondary">
                     {t.runLocally}
                     <ArrowRight aria-hidden size={18} strokeWidth={2.75} />
                   </ButtonLink>
-                )}
+                ) : null}
               </div>
             </div>
             {img && (
@@ -150,9 +143,9 @@ export function ProjectPage({ locale, slug }: { locale: Locale; slug: string }) 
                 <dd className="text-neutral-800">{t.status[project.status]}</dd>
                 <dt className="font-bold text-accent-900">{t.code}</dt>
                 <dd className="min-w-0 [overflow-wrap:anywhere]">
-                  <a href={project.repoUrl} target="_blank" rel="noopener noreferrer" className="font-semibold">
+                  {project.codeAvailable !== false ? <a href={project.repoUrl} target="_blank" rel="noopener noreferrer" className="font-semibold">
                     {project.repoUrl.replace("https://", "")}
-                  </a>
+                  </a> : <span>{t.codeUnavailable}</span>}
                 </dd>
                 <dt className="font-bold text-accent-900">{t.demo}</dt>
                 <dd className="text-neutral-800">
@@ -160,11 +153,11 @@ export function ProjectPage({ locale, slug }: { locale: Locale; slug: string }) 
                     <a href={project.demoUrl} target="_blank" rel="noopener noreferrer" className="font-semibold">
                       {t.openDemo}
                     </a>
-                  ) : (
+                  ) : project.codeAvailable !== false ? (
                     <a href="#run" className="font-semibold">
                       {t.notHosted}
                     </a>
-                  )}
+                  ) : <span>{locale === "pl" ? "Brak publicznego demo" : "No public demo"}</span>}
                 </dd>
               </dl>
             </div>
@@ -200,10 +193,10 @@ export function ProjectPage({ locale, slug }: { locale: Locale; slug: string }) 
             <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,420px),1fr))] gap-[22px]">
               {details.screenshots.map((shot) => (
                 <figure key={shot.src} className="rounded-[24px] border-2 border-ink bg-neutral-100 p-3">
-                  <div className="relative aspect-[16/10] overflow-hidden rounded-[14px] bg-white">
+                  <a href={shot.src} target="_blank" rel="noopener noreferrer" aria-label={`${t.openImage}: ${shot.alt}`} className="relative block aspect-[16/10] overflow-hidden rounded-[14px] bg-white">
                     <Image src={shot.src} alt={shot.alt} fill sizes="(min-width: 1024px) 560px, 100vw" className="object-contain" />
-                  </div>
-                  <figcaption className="px-1.5 pb-1 pt-3 text-[15px] font-semibold text-neutral-800">{shot.caption}</figcaption>
+                  </a>
+                  <figcaption className="px-1.5 pb-1 pt-3 text-[15px] font-semibold text-neutral-800">{shot.caption}<span className="mt-1 block text-xs font-normal">{t.openImage} ↗</span></figcaption>
                 </figure>
               ))}
             </div>
@@ -211,7 +204,7 @@ export function ProjectPage({ locale, slug }: { locale: Locale; slug: string }) 
         )}
 
         {/* Try it */}
-        <section id="run" aria-labelledby="try-title" className={`${wrap} pb-[clamp(40px,6vw,72px)]`}>
+        {project.codeAvailable !== false && <section id="run" aria-labelledby="try-title" className={`${wrap} pb-[clamp(40px,6vw,72px)]`}>
           <div className="flex flex-wrap items-center gap-[clamp(24px,4vw,48px)] rounded-[36px] bg-ink p-[clamp(22px,4vw,48px)] text-paper">
             <div className="flex min-w-0 flex-[1_1_320px] flex-col items-start gap-4">
               <p className="text-[13px] font-bold uppercase tracking-[0.12em] text-accent-400">{t.tryKicker}</p>
@@ -240,6 +233,7 @@ export function ProjectPage({ locale, slug }: { locale: Locale; slug: string }) 
           </div>
         </section>
 
+        }
         {/* Next project */}
         <nav aria-label={t.nextProject} className={`${wrap} pb-[clamp(56px,8vw,110px)]`}>
           <Link

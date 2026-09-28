@@ -9,6 +9,7 @@ export type ProjectImage = { src: string | null; alt: string; placeholder: strin
 
 export type ProjectPreview =
   | { kind: "terminal"; title: string; lines: string[] }
+  | { kind: "flow"; title: string; lines: string[] }
   | { kind: "stat"; value: string; label: string };
 
 export type ProjectScreenshot = { src: string; alt: string; caption: string };
@@ -32,6 +33,7 @@ export type Project = {
   status: ProjectStatus;
   layout: ProjectLayout;
   repoUrl: string;
+  codeAvailable?: boolean;
   demoUrl: string | null;
   details: ProjectDetails;
   images: ProjectImage[];
@@ -40,7 +42,6 @@ export type Project = {
 };
 
 const GH = "https://github.com/KacperBlok1";
-const RAW = "https://raw.githubusercontent.com/KacperBlok1";
 
 export const projects: Project[] = [
   {
@@ -221,7 +222,7 @@ export const projects: Project[] = [
       ],
       run: ["npm install", "npm run dev", "# production: docker compose up -d --build  (port 8080)"],
     },
-    images: [{ src: "/images/projects/blockout-card.webp", alt: "Blockout homepage", placeholder: "Site screenshot (4:3)", screenshot: true }],
+    images: [{ src: "/images/projects/blockout-card.webp", alt: "Blockout website with printing and signage services and a request-a-quote button", placeholder: "Site screenshot (4:3)", screenshot: true }],
   },
   {
     slug: "face-emotion-recognition",
@@ -267,12 +268,12 @@ export const projects: Project[] = [
       ],
       screenshots: [
         {
-          src: `${RAW}/face-emotion-recognition-cnn/HEAD/reports/training_history.png`,
+          src: "/images/projects/cnn-training-history.webp",
           alt: "Training and validation loss and accuracy per epoch",
           caption: "Training history: loss and accuracy per epoch",
         },
         {
-          src: `${RAW}/face-emotion-recognition-cnn/HEAD/reports/confusion_matrix.png`,
+          src: "/images/projects/cnn-confusion-matrix.webp",
           alt: "Confusion matrix of the seven emotion classes on the test set",
           caption: "Confusion matrix on the held-out test set",
         },
@@ -301,6 +302,7 @@ export const projects: Project[] = [
     status: "in-progress",
     layout: "compact",
     repoUrl: `${GH}/student-progress`,
+    codeAvailable: false,
     demoUrl: null,
     details: {
       overview:
@@ -335,16 +337,14 @@ export const projects: Project[] = [
     },
     images: [{ src: null, alt: "AI code review flow", placeholder: "App screenshot (16:10)" }],
     preview: {
-      kind: "terminal",
-      title: "ai code review · flow",
+      kind: "flow",
+      title: "Code review · process diagram",
       lines: [
         "1 GitHub API: student's repos",
         "2 fetch the source code",
         "3 Ollama (local LLM) review",
         "4 parse JSON: line, severity",
         "5 save to student history",
-        "",
-        "grade = points% → 2.0 … 5.0",
       ],
     },
   },
@@ -400,8 +400,8 @@ export const projects: Project[] = [
     },
     images: [{ src: null, alt: "AI Upscaler processing pipeline", placeholder: "App screenshot (4:3)" }],
     preview: {
-      kind: "terminal",
-      title: "upscale.py · pipeline",
+      kind: "flow",
+      title: "Image processing · process diagram",
       lines: [
         "1 load image",
         "2 resize (OpenCV)",
@@ -424,6 +424,7 @@ export type ProjectTranslation = {
   };
   images: { alt: string }[];
   statLabel?: string;
+  preview?: ProjectPreview;
   sticker?: string;
 };
 
@@ -440,7 +441,7 @@ function translate(project: Project, t: ProjectTranslation): Project {
       run: t.details.run ?? project.details.run,
     },
     images: project.images.map((image, i) => ({ ...image, ...t.images[i] })),
-    preview: project.preview?.kind === "stat" && t.statLabel ? { ...project.preview, label: t.statLabel } : project.preview,
+    preview: t.preview ?? (project.preview?.kind === "stat" && t.statLabel ? { ...project.preview, label: t.statLabel } : project.preview),
     sticker: t.sticker ?? project.sticker,
   };
 }
