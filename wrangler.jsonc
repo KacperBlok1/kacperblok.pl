@@ -9,11 +9,11 @@
     "binding": "ASSETS"
   },
   "observability": { "enabled": true },
-  // domain is attached after the zone kacperblok.pl is active in Cloudflare, see README
-  // "routes": [
-  //   { "pattern": "kacperblok.pl", "custom_domain": true },
-  //   { "pattern": "www.kacperblok.pl", "custom_domain": true }
-  // ],
+  // requires the zone kacperblok.pl to be active in Cloudflare, see README
+  "routes": [
+    { "pattern": "kacperblok.pl", "custom_domain": true },
+    { "pattern": "www.kacperblok.pl", "custom_domain": true }
+  ],
   "services": [
     // self reference used by the cache, must match "name"
     { "binding": "WORKER_SELF_REFERENCE", "service": "kacperblok-pl" }

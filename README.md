@@ -75,8 +75,8 @@ Przy automatycznym deployu z GitHuba (Workers Builds) ustaw komendę builda na
 
 1. W Cloudflare: *Add a domain* → `kacperblok.pl`, plan Free. Cloudflare poda dwa serwery DNS.
 2. W panelu home.pl zmień serwery DNS domeny na te z Cloudflare (propagacja do 24–48 h).
-3. Po aktywacji strefy odkomentuj `routes` w `wrangler.jsonc` i zrób `npm run deploy`
-   (albo dodaj Custom Domain w ustawieniach Workera). Certyfikat SSL wystawia Cloudflare.
+3. Po aktywacji strefy `routes` w `wrangler.jsonc` podpinają `kacperblok.pl` i `www` pod Workera przy deployu
+   (rekordy A/CNAME dla `@` i `www` w DNS Cloudflare muszą być wcześniej usunięte). Certyfikat SSL wystawia Cloudflare.
 
 ## Domena i SEO
 
