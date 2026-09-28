@@ -18,9 +18,10 @@
     // self reference used by the cache, must match "name"
     { "binding": "WORKER_SELF_REFERENCE", "service": "kacperblok-pl" }
   ],
-  "r2_buckets": [
-    // create before the first deploy: npx wrangler r2 bucket create kacperblok-pl-cache
-    { "binding": "NEXT_INC_CACHE_R2_BUCKET", "bucket_name": "kacperblok-pl-cache" }
+  "kv_namespaces": [
+    // create before the first deploy: npx wrangler kv namespace create kacperblok-pl-cache
+    // (or Storage & Databases -> KV in the dashboard) and paste its id here
+    { "binding": "NEXT_INC_CACHE_KV", "id": "c7e2624fdf144474b3b3bb738351adec" }
   ],
   "durable_objects": {
     "bindings": [{ "name": "NEXT_CACHE_DO_QUEUE", "class_name": "DOQueueHandler" }]
