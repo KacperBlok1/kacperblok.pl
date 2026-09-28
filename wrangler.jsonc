@@ -3,21 +3,30 @@
   "name": "kacperblok-pl",
   "main": ".open-next/worker.js",
   "compatibility_date": "2026-09-28",
-  "compatibility_flags": [
-    "nodejs_compat",
-    "global_fetch_strictly_public"
-  ],
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
   },
+  "observability": { "enabled": true },
+  // domain is attached after the zone kacperblok.pl is active in Cloudflare, see README
+  // "routes": [
+  //   { "pattern": "kacperblok.pl", "custom_domain": true },
+  //   { "pattern": "www.kacperblok.pl", "custom_domain": true }
+  // ],
   "services": [
-    {
-      "binding": "WORKER_SELF_REFERENCE",
-      "service": "kacperblok-pl"
-    }
+    // self reference used by the cache, must match "name"
+    { "binding": "WORKER_SELF_REFERENCE", "service": "kacperblok-pl" }
   ],
-  "observability": {
-    "enabled": true
+  "r2_buckets": [
+    // create before the first deploy: npx wrangler r2 bucket create kacperblok-pl-cache
+    { "binding": "NEXT_INC_CACHE_R2_BUCKET", "bucket_name": "kacperblok-pl-cache" }
+  ],
+  "durable_objects": {
+    "bindings": [{ "name": "NEXT_CACHE_DO_QUEUE", "class_name": "DOQueueHandler" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["DOQueueHandler"] }],
+  "images": {
+    "binding": "IMAGES"
   }
 }

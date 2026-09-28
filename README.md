@@ -29,15 +29,54 @@ własny `<html lang>` i odnośniki `hreflang`.
 - `src/data/repositories.ts` – repozytoria w sekcji GitHub
 - `src/data/about.ts` – krótkie fakty i sekcja „Co buduję” w obu językach
 - `public/images/projects` – zrzuty ekranu projektów
-- `public/cv` – tu wrzucić CV jako `Kacper-Blok-CV.pdf`; bez pliku przycisk w hero zamienia się na „Poproś o CV” (mail)
+- `public/cv` – tu wrzucić CV jako `Kacper-Blok-CV.pdf`; bez pliku przycisk w hero zamienia się na „Poproś o CV” (mail).
+  Lista plików z `public/` jest zapisywana podczas builda (`next.config.ts`), więc po dodaniu CV trzeba przebudować stronę.
 
 ## GitHub
 
 Sekcja z repozytoriami pobiera gwiazdki, język i datę ostatniego pusha z GitHub API po stronie serwera, z cache na godzinę. Jak API nie odpowie, pokazuje się lokalna lista z `repositories.ts`. `GITHUB_TOKEN` jest opcjonalny i nigdy nie trafia do przeglądarki.
 
-## Wdrożenie
+## Wdrożenie (Cloudflare Workers)
 
-Vercel albo własny serwer (`npm ci && npm run build && npm run start` za reverse proxy). Na produkcji ustawić `NEXT_PUBLIC_SITE_URL`.
+Strona działa na Cloudflare Workers przez adapter [OpenNext](https://opennext.js.org/cloudflare).
+Konfiguracja: `wrangler.jsonc` (Worker `kacperblok-pl`) i `open-next.config.ts`.
+
+- R2 (`kacperblok-pl-cache`) trzyma prerenderowane strony i cache zapytań do GitHub API,
+- Durable Object `DOQueueHandler` odświeża strony w tle po upływie `revalidate` (1 h),
+- binding `IMAGES` optymalizuje obrazy z `next/image` (Cloudflare Images).
+
+Skrypty:
+
+```bash
+npm run preview   # build pod Workera + lokalny podgląd na http://localhost:8787
+npm run deploy    # build + wgranie cache do R2 + deploy
+npm run cf-typegen  # typy bindingów do cloudflare-env.d.ts
+```
+
+Lokalne sekrety dla `npm run preview`: skopiuj `.dev.vars.example` do `.dev.vars`.
+
+### Pierwsze wdrożenie
+
+```bash
+npx wrangler login
+npx wrangler r2 bucket create kacperblok-pl-cache
+npx wrangler secret put GITHUB_TOKEN   # opcjonalnie
+npm run deploy
+```
+
+R2 wymaga jednorazowego włączenia w panelu Cloudflare (darmowy limit wystarcza dla portfolio).
+Zmienne `NEXT_PUBLIC_*` są wstawiane w czasie builda, więc ustawia się je w `.env.local`
+lub w zmiennych builda (Workers Builds), a nie w `vars` Workera.
+
+Przy automatycznym deployu z GitHuba (Workers Builds) ustaw komendę builda na
+`npx opennextjs-cloudflare build`, a deployu na `npx opennextjs-cloudflare deploy`.
+
+### Domena z home.pl
+
+1. W Cloudflare: *Add a domain* → `kacperblok.pl`, plan Free. Cloudflare poda dwa serwery DNS.
+2. W panelu home.pl zmień serwery DNS domeny na te z Cloudflare (propagacja do 24–48 h).
+3. Po aktywacji strefy odkomentuj `routes` w `wrangler.jsonc` i zrób `npm run deploy`
+   (albo dodaj Custom Domain w ustawieniach Workera). Certyfikat SSL wystawia Cloudflare.
 
 ## Domena i SEO
 
